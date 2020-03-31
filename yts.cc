@@ -2,16 +2,23 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include "config.h"
 int main (int argc, char** argv) {
-    if (argc < 3){
+    if (argc < 2){
         std::cout << "Missing args" << std::endl;
         return 1;
     }
+    std::string number;
+    if(argc >= 3){
+        number = argv[2];
+    } else {
+        number = "5";
+    }
     std::map<size_t, std::pair<std::string, std::string>> map;
-    std::cout << "Searching for top " << argv[2] << " results for " << argv[1] << std::endl << "..." << std::endl;
+    std::cout << "Searching for top " << number << " results for " << argv[1] << std::endl << "..." << std::endl;
     std::string search;
     search += "youtube-dl -e -g -f \"bestaudio\" \"ytsearch";
-    search += argv[2];
+    search += number;
     search += ":";
     search += argv[1];
     search += "\" > tmp.txt";
@@ -49,8 +56,13 @@ int main (int argc, char** argv) {
     std::string dlStr = "youtube-dl -f \"bestaudio\"";
     dlStr += " -o '";
     dlStr += map[choice].first;
-    dlStr += "' \"";
+    dlStr += "\%(ext)s' \"";
     dlStr += map[choice].second;
     dlStr += "\"";
     system(dlStr.c_str());
+    std::string mvStr = "mv '";
+    mvStr += map[choice].first;
+    mvStr += "' ";
+    mvStr += DESTINATION_FOLDER;
+    system(mvStr.c_str());
 }
