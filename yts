@@ -1,2 +1,0 @@
-#!/bin/sh
-youtube-dl -e -g -f "bestaudio" "ytsearch5:$1"
